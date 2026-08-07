@@ -1,0 +1,60 @@
+/* Header Navbar */
+.navbar {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #E8D8CE;
+    padding: 15px 40px;
+    display: flex;
+    justify: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.navbar-logo {
+    color: #4A3E3D;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.navbar-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.nav-link-btn {
+    background: transparent;
+    border: 1px solid #E8D8CE;
+    color: #8C6D58;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-link-btn:hover {
+    background-color: #FAF6F0;
+    color: #4A3E3D;
+}
+
+.cart-button {
+    background-color: #8C6D58;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.cart-button:hover {
+    background-color: #6E5444;
+}

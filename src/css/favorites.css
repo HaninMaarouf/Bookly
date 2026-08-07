@@ -1,0 +1,75 @@
+/* Favorites Page Layout */
+.favorites-page {
+    background-color: #FAF6F0;
+    min-height: calc(100vh - 70px);
+    padding: 30px 20px;
+}
+
+.favorites-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.favorites-header {
+    display: flex;
+    justify: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.favorites-header h2 {
+    color: #4A3E3D;
+    margin: 0;
+}
+
+/* Empty State */
+.favorites-empty {
+    text-align: center;
+    background: #FFFFFF;
+    border: 1px solid #E8D8CE;
+    padding: 50px 20px;
+    border-radius: 12px;
+}
+
+.favorites-empty p {
+    color: #8C6D58;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* Favorites Grid */
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #8C6D58;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #6E5444;
+}
+
+.btn-secondary {
+    background-color: #FAF6F0;
+    border: 1px solid #E8D8CE;
+    color: #8C6D58;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #E8D8CE;
+}
