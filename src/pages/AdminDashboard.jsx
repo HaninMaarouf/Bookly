@@ -1,12 +1,20 @@
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from "../context/AuthContext";
+import AdminUsers from "./AdminUsers";
+import "../css/admin.css";
 
 export default function AdminDashboard() {
   const { profile, logout } = useAuth();
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Admin panel — hi, {profile?.full_name || 'admin'}</h1>
-      <button onClick={logout}>Log out</button>
+    <div className="admin-layout">
+      <div className="admin-container">
+        <div className="admin-header-flex">
+          <h1>Admin panel</h1>
+          <button className="admin-button admin-button-outline admin-button-small" onClick={logout}>Log out</button>
+        </div>
+
+        <AdminUsers />
+      </div>
     </div>
   );
 }
