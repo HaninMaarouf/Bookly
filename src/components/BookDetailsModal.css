@@ -1,0 +1,130 @@
+.book-details-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(35, 24, 20, 0.62);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 3000;
+    overflow-y: auto;
+}
+
+.book-details-modal {
+    position: relative;
+    width: min(760px, 100%);
+    max-height: min(90vh, 860px);
+    overflow-y: auto;
+    background: #FCF8F2;
+    border: 1px solid #E8D8CE;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(74, 62, 61, 0.24);
+    padding: 28px;
+    color: #4A3E3D;
+}
+
+.book-details-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: none;
+    background: transparent;
+    color: #8C6D58;
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.book-details-header {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.book-details-image {
+    width: 170px;
+    min-width: 170px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #E8D8CE;
+    background: #F5F5F5;
+}
+
+.book-details-meta h2 {
+    margin: 0 0 8px;
+    font-size: 24px;
+    color: #4A3E3D;
+}
+
+.book-details-eyebrow {
+    margin: 0 0 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #8C6D58;
+    font-weight: 700;
+}
+
+.book-details-author,
+.book-details-info,
+.book-details-price {
+    margin: 0 0 8px;
+    color: #6E5444;
+}
+
+.book-details-price {
+    font-weight: 700;
+}
+
+.book-details-description {
+    margin: 20px 0 24px;
+    line-height: 1.7;
+    color: #4A3E3D;
+}
+
+.book-details-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.book-details-link,
+.book-details-close-btn {
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #8C6D58;
+    cursor: pointer;
+}
+
+.book-details-link {
+    color: #8C6D58;
+    background: #FAF6F0;
+}
+
+.book-details-close-btn {
+    color: #FFF;
+    background: #8C6D58;
+    border: none;
+}
+
+@media (max-width: 700px) {
+    .book-details-modal {
+        padding: 22px;
+    }
+
+    .book-details-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .book-details-image {
+        width: 140px;
+        min-width: 140px;
+        height: 210px;
+    }
+}

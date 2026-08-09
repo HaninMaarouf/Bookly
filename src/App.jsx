@@ -2,10 +2,11 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Splash from './pages/Splash';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
+import UserApp from './pages/UserApp';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './pages/ProtectedRoute';
 import AdminRoute from './pages/AdminRoute';
+import './css/index.css';
 
 export default function App() {
   return (
@@ -17,7 +18,7 @@ export default function App() {
         path="/dashboard"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <UserApp />
           </ProtectedRoute>
         }
       />

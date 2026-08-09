@@ -11,10 +11,35 @@ body,
   min-height: 100vh;
 }
 
+:root {
+  --bg-primary: #faf6f0;
+  --card-bg: #ffffff;
+  --accent-main: #8c6d58;
+  --accent-dark: #6e5444;
+  --border-color: #e8d8ce;
+  --text-main: #4a3e3d;
+  --text-muted: #8c6d58;
+}
+
 body {
   font-family:
     system-ui,
     -apple-system,
+    "Segoe UI",
+    Tahoma,
+    Geneva,
+    Verdana,
     sans-serif;
-  color: #4a3b2c;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-container {
+  min-height: 100vh;
 }

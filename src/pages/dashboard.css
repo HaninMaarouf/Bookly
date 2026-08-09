@@ -1,0 +1,115 @@
+:root {
+    --bg-primary: #FAF6F0;
+    --card-bg: #FFFFFF;
+    --border-color: #E8D8CE;
+    --text-main: #4A3E3D;
+    --text-muted: #8C6D58;
+    --accent-main: #8C6D58;
+    --accent-dark: #6E5444;
+}
+
+.dashboard-page {
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+    padding: 24px 20px 48px;
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.hero-panel {
+    background: linear-gradient(135deg, #FFFDF8 0%, #F4E8DD 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 8px 24px rgba(74, 62, 61, 0.06);
+}
+
+.hero-panel h1 {
+    margin: 0 0 8px;
+    color: var(--text-main);
+    font-size: 32px;
+}
+
+.hero-panel p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 16px;
+    max-width: 700px;
+    line-height: 1.6;
+}
+
+.section-block {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-title {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 22px;
+}
+
+.section-link {
+    color: var(--accent-main);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.dashboard-error {
+    color: #D9534F;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.dashboard-loading {
+    text-align: center;
+    color: var(--text-muted);
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+@media (max-width: 700px) {
+    .dashboard-page {
+        padding: 18px 14px 36px;
+    }
+
+    .hero-panel {
+        padding: 22px;
+    }
+
+    .hero-panel h1 {
+        font-size: 24px;
+    }
+
+    .section-title {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,25 @@
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    color: #4A3E3D;
+    margin: 0;
+}
+
+.btn-secondary {
+    background-color: #FAF6F0;
+    border: 1px solid #E8D8CE;
+    color: #8C6D58;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #E8D8CE;
+}
