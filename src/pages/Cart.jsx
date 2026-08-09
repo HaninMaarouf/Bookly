@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 import './Cart.css';
 
-export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
+export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClearCart, onNavigateHome }) {
+    const { user } = useAuth();
     const [location, setLocation] = useState('');
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
-
-    // Quantity modifiers
-    const handleUpdateQuantity = (id, delta) => {
-        setCartItems((prev) =>
-            prev
-                .map((item) => {
-                    if (item.id === id) {
-                        const newQty = item.quantity + delta;
-                        return newQty > 0 ? { ...item, quantity: newQty } : null;
-                    }
-                    return item;
-                })
-                .filter(Boolean)
-        );
-    };
-
-    // Item deletion
-    const handleRemoveItem = (id) => {
-        setCartItems((prev) => prev.filter((item) => item.id !== id));
-    };
+    const [checkoutError, setCheckoutError] = useState('');
 
     // Calculations
     const subtotal = cartItems.reduce(
@@ -34,22 +18,62 @@ export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
     const shippingFee = cartItems.length > 0 ? 5.0 : 0.0;
     const grandTotal = subtotal + shippingFee;
 
-    // Checkout submit
-    const handleCheckout = (e) => {
+    // Checkout submit — writes to Supabase, then clears the cart in Supabase too
+    const handleCheckout = async (e) => {
         e.preventDefault();
+        setCheckoutError('');
+
         if (!location.trim()) {
             alert('Please enter a valid delivery address.');
             return;
         }
 
+        if (!user) {
+            setCheckoutError('You must be logged in to place an order.');
+            return;
+        }
+
         setIsCheckingOut(true);
 
-        // Simulate order API call
-        setTimeout(() => {
+        try {
+            // 1. Create the order
+            const { data: order, error: orderError } = await supabase
+                .from('orders')
+                .insert({
+                    user_id: user.id,
+                    location: location.trim(),
+                    total: grandTotal,
+                    status: 'pending',
+                })
+                .select()
+                .single();
+
+            if (orderError) throw orderError;
+
+            // 2. Create one order_items row per book in the cart
+            const itemsToInsert = cartItems.map((item) => ({
+                order_id: order.id,
+                title: item.title,
+                author: item.author,
+                price: item.price,
+                quantity: item.quantity,
+            }));
+
+            const { error: itemsError } = await supabase
+                .from('order_items')
+                .insert(itemsToInsert);
+
+            if (itemsError) throw itemsError;
+
+            // 3. Clear the cart (in Supabase and local state) and show confirmation
+            await onClearCart();
             setIsCheckingOut(false);
             setOrderSuccess(true);
-            setCartItems([]); // Clear local & persisted state
-        }, 1500);
+        } catch (err) {
+            console.error('Checkout failed:', err);
+            setIsCheckingOut(false);
+            setCheckoutError('Something went wrong placing your order. Please try again.');
+        }
     };
 
     if (orderSuccess) {
@@ -74,9 +98,9 @@ export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
         <div className="cart-page">
             <div className="cart-container">
                 <div className="cart-header">
-                    <h2>Your Shopping Cart 🛒</h2>
+                    <h2>Your Shopping Cart </h2>
                     <button className="btn-secondary" onClick={onNavigateHome}>
-                        ← Back to Search
+                        ← Back 
                     </button>
                 </div>
 
@@ -113,14 +137,14 @@ export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
                                         <div className="quantity-controls">
                                             <button
                                                 className="qty-btn"
-                                                onClick={() => handleUpdateQuantity(item.id, -1)}
+                                                onClick={() => onUpdateQuantity(item.id, -1)}
                                             >
                                                 -
                                             </button>
                                             <span className="qty-value">{item.quantity}</span>
                                             <button
                                                 className="qty-btn"
-                                                onClick={() => handleUpdateQuantity(item.id, 1)}
+                                                onClick={() => onUpdateQuantity(item.id, 1)}
                                             >
                                                 +
                                             </button>
@@ -128,7 +152,7 @@ export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
 
                                         <button
                                             className="delete-btn"
-                                            onClick={() => handleRemoveItem(item.id)}
+                                            onClick={() => onRemoveItem(item.id)}
                                             title="Remove Item"
                                         >
                                             🗑️
@@ -165,6 +189,12 @@ export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
                                     onChange={(e) => setLocation(e.target.value)}
                                     required
                                 />
+
+                                {checkoutError && (
+                                    <p style={{ color: '#B85C5C', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                        {checkoutError}
+                                    </p>
+                                )}
 
                                 <button
                                     type="submit"

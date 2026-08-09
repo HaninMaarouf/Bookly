@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import BookCard from '../components/BookCard';
 import SearchPanel from '../components/SearchPanel';
@@ -18,6 +17,8 @@ const CATEGORY_OPTIONS = [
 ];
 
 const FEATURED_QUERIES = ['classic literature', 'history', 'science'];
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const parsePublicationDate = (value) => {
     if (!value || value === 'Unknown' || value === 'unknown') {
@@ -170,9 +171,15 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         <div className="dashboard-page">
             <div className="dashboard-container">
                 <div className="hero-panel">
-                    <h1>Discover your next favorite read</h1>
-                    <p>Browse thoughtful stories, timeless classics, and practical guides in a calm, curated bookstore setting.</p>
-                </div>
+    <h1 className="hero-heading">
+        <span className="hero-heading-rotate">
+            <span>Discover your next favorite read</span>
+            <span>Find stories worth staying up for</span>
+            <span>Curated books, chosen with care</span>
+        </span>
+    </h1>
+    <p>Browse thoughtful stories, timeless classics, and practical guides in a calm, curated bookstore setting.</p>
+</div>
 
                 <SearchPanel
                     searchQuery={searchQuery}
@@ -191,7 +198,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
                         <section className="section-block">
                             <div className="section-header">
                                 <h2 className="section-title">Newest Releases</h2>
-                                <a href="#" className="section-link">See all</a>
+                               
                             </div>
                             <div className="section-grid">
                                 {featuredLoading ? (
@@ -216,7 +223,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
                         <section className="section-block">
                             <div className="section-header">
                                 <h2 className="section-title">Best Selling</h2>
-                                <a href="#" className="section-link">See all</a>
+                                
                             </div>
                             <div className="section-grid">
                                 {bestSellingBooks.length > 0 ? (
@@ -239,7 +246,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
                         <section className="section-block">
                             <div className="section-header">
                                 <h2 className="section-title">Most Popular</h2>
-                                <a href="#" className="section-link">Explore</a>
+                               
                             </div>
                             <div className="section-grid">
                                 {popularBooks.length > 0 ? (
@@ -308,5 +315,4 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
             <BookDetailsModal book={selectedBook} onClose={() => setSelectedBook(null)} />
         </div>
     );
-
 }

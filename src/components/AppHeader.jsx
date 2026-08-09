@@ -4,15 +4,48 @@ import './AppHeader.css';
 export default function AppHeader({ favoritesCount, cartCount, onNavigateDashboard, onNavigateFavorites, onNavigateCart }) {
     return (
         <header className="navbar">
-            <h1 className="navbar-logo" onClick={onNavigateDashboard}>
-                Bookly 📚
-            </h1>
+            <div className="navbar-logo" onClick={onNavigateDashboard}>
+                <svg className="navbar-logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 25 C40 18, 25 18, 15 22 L15 78 C25 74, 40 74, 50 81 Z" fill="#FFFFFF" stroke="#4A3E3D" strokeWidth="3" />
+                    <path d="M50 25 C60 18, 75 18, 85 22 L85 78 C75 74, 60 74, 50 81 Z" fill="#FFFFFF" stroke="#4A3E3D" strokeWidth="3" />
+                    <line x1="50" y1="25" x2="50" y2="81" stroke="#8C6D58" strokeWidth="3" />
+                    <line x1="20" y1="32" x2="42" y2="30" stroke="#E8D8CE" strokeWidth="3" />
+                    <line x1="20" y1="42" x2="42" y2="40" stroke="#E8D8CE" strokeWidth="3" />
+                    <line x1="20" y1="52" x2="42" y2="50" stroke="#E8D8CE" strokeWidth="3" />
+                    <line x1="58" y1="30" x2="80" y2="32" stroke="#E8D8CE" strokeWidth="3" />
+                    <line x1="58" y1="40" x2="80" y2="42" stroke="#E8D8CE" strokeWidth="3" />
+                    <line x1="58" y1="50" x2="80" y2="52" stroke="#E8D8CE" strokeWidth="3" />
+                </svg>
+                <span className="navbar-logo-text">Bookly</span>
+            </div>
             <div className="navbar-actions">
-                <span className="favorites-count" onClick={onNavigateFavorites}>
-                    Favorites ♥ ({favoritesCount})
-                </span>
+                <button className="favorites-pill" onClick={onNavigateFavorites}>
+                    <svg className="favorites-heart-icon" viewBox="0 0 24 24" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 21s-6.5-4.35-9.5-8.5C0.7 9.5 1.5 5.5 5 4.2c2.2-0.8 4.4 0.1 5.5 1.9 1.1-1.8 3.3-2.7 5.5-1.9 3.5 1.3 4.3 5.3 2.5 8.3C18.5 16.65 12 21 12 21z"
+                            fill="#D9534F"
+                            stroke="#D9534F"
+                            strokeWidth="1"
+                        />
+                    </svg>
+                    <span className="pill-label">Favorites</span>
+                    <span key={favoritesCount} className="pill-count pill-bounce">{favoritesCount}</span>
+                </button>
                 <button className="cart-button" onClick={onNavigateCart}>
-                    Cart 🛒 ({cartCount})
+                    <svg className="cart-icon-svg" viewBox="0 0 24 24" width="17" height="17" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M6 6h15l-1.5 9h-12L5 3H2"
+                            fill="none"
+                            stroke="#FFFFFF"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                        <circle cx="9" cy="20" r="1.4" fill="#FFFFFF" />
+                        <circle cx="18" cy="20" r="1.4" fill="#FFFFFF" />
+                    </svg>
+                    <span className="pill-label">Cart</span>
+                    <span key={cartCount} className="pill-count cart-count pill-bounce">{cartCount}</span>
                 </button>
             </div>
         </header>

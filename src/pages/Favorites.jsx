@@ -7,7 +7,7 @@ export default function Favorites({ favorites, onAddToCart, onToggleFav, onNavig
     return (
         <div className="favorites-page">
             <div className="favorites-container">
-                <PageHeader title="Your Saved Books ♥" actionLabel="← Back to Search" onAction={onNavigateHome} />
+                <PageHeader title="Your Fav Books " actionLabel="← Back " onAction={onNavigateHome} />
 
                 {favorites.length === 0 ? (
                     <div className="favorites-empty">
