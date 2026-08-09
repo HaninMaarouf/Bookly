@@ -106,9 +106,11 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
     useEffect(() => {
         let isCancelled = false;
 
-        const loadFeaturedBooks = async () => {
-            setFeaturedLoading(true);
-            setFeaturedError('');
+        const loadFeaturedBooks = async (attempt = 1) => {
+            if (attempt === 1) {
+                setFeaturedLoading(true);
+                setFeaturedError('');
+            }
 
             try {
                 const responses = await Promise.all(FEATURED_QUERIES.map((query) => fetchBooksFromApi(query)));
@@ -128,10 +130,17 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
                     newestReleases
                 });
             } catch (err) {
-                console.error('Featured books failed:', err);
-                if (!isCancelled) {
-                    setFeaturedError('We could not load featured books right now.');
+                if (isCancelled) {
+                    return;
                 }
+
+                if (attempt < 3) {
+                    await delay(300 * attempt);
+                    return loadFeaturedBooks(attempt + 1);
+                }
+
+                console.error('Featured books failed:', err);
+                setFeaturedError('We could not load featured books right now.');
             } finally {
                 if (!isCancelled) {
                     setFeaturedLoading(false);
