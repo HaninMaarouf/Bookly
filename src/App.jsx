@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Dashboard from './pages/Dashboard';
 import Cart from './pages/Cart';
 import Favorites from './pages/Favorites';
-import './CSS/navbar.css';
+import AppHeader from './components/AppHeader';
+import AppToast from './components/AppToast';
+import Footer from './components/Footer';
+import './css/index.css';
 
 export default function App() {
     const [currentPage, setCurrentPage] = useState('dashboard');
@@ -26,7 +29,6 @@ export default function App() {
         localStorage.setItem('bookly_favorites', JSON.stringify(favorites));
     }, [favorites]);
 
-    // Toast trigger helper
     const showToast = (msg) => {
         setToastMessage(msg);
         setTimeout(() => {
@@ -63,48 +65,15 @@ export default function App() {
 
     return (
         <div className="app-container">
-            {/* Navigation Header */}
-            <header className="navbar">
-                <h1 className="navbar-logo" onClick={() => setCurrentPage('dashboard')}>
-                    Bookly 📚
-                </h1>
-                <div className="navbar-actions">
-                    <span
-                        className="favorites-count"
-                        onClick={() => setCurrentPage('favorites')}
-                    >
-                        Favorites ♥ ({favorites.length})
-                    </span>
-                    <button
-                        className="cart-button"
-                        onClick={() => setCurrentPage('cart')}
-                    >
-                        Cart 🛒 ({totalCartCount})
-                    </button>
-                </div>
-            </header>
+            <AppHeader
+                favoritesCount={favorites.length}
+                cartCount={totalCartCount}
+                onNavigateDashboard={() => setCurrentPage('dashboard')}
+                onNavigateFavorites={() => setCurrentPage('favorites')}
+                onNavigateCart={() => setCurrentPage('cart')}
+            />
+            <AppToast message={toastMessage} />
 
-            {/* Toast Notification Container */}
-            {toastMessage && (
-                <div style={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    backgroundColor: '#4A3E3D',
-                    color: '#FFF',
-                    padding: '12px 20px',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                    zIndex: 2000,
-                    fontSize: '14px',
-                    fontWeight: '500',
-                    transition: 'all 0.3s ease'
-                }}>
-                    {toastMessage}
-                </div>
-            )}
-
-            {/* Main Views */}
             <main className="main-content">
                 {currentPage === 'dashboard' && (
                     <Dashboard
@@ -129,6 +98,7 @@ export default function App() {
                     />
                 )}
             </main>
+            <Footer />
         </div>
     );
 }

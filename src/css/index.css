@@ -1,0 +1,31 @@
+:root {
+  --bg-primary: #FAF6F0;
+  --card-bg: #FFFFFF;
+  --accent-main: #8C6D58;
+  --accent-dark: #6E5444;
+  --border-color: #E8D8CE;
+  --text-main: #4A3E3D;
+  --text-muted: #8C6D58;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.app-container {
+  min-height: 100vh;
+}

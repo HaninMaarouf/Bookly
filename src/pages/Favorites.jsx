@@ -1,17 +1,13 @@
 import React from 'react';
 import BookCard from '../components/BookCard';
-import '../CSS/favorites.css'; // Adjust path based on your folder layout
+import PageHeader from '../components/PageHeader';
+import './Favorites.css';
 
 export default function Favorites({ favorites, onAddToCart, onToggleFav, onNavigateHome }) {
     return (
         <div className="favorites-page">
             <div className="favorites-container">
-                <div className="favorites-header">
-                    <h2>Your Saved Books ♥</h2>
-                    <button className="btn-secondary" onClick={onNavigateHome}>
-                        ← Back to Search
-                    </button>
-                </div>
+                <PageHeader title="Your Saved Books ♥" actionLabel="← Back to Search" onAction={onNavigateHome} />
 
                 {favorites.length === 0 ? (
                     <div className="favorites-empty">

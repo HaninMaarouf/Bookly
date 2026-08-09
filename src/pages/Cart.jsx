@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../CSS/cart.css'; // Make sure the path matches your folder structure
+import './Cart.css';
 
 export default function Cart({ cartItems, setCartItems, onNavigateHome }) {
     const [location, setLocation] = useState('');
