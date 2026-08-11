@@ -1,0 +1,257 @@
+/* Admin Nude Theme Palette */
+:root {
+  --admin-bg: #F5EDE4;
+  --admin-card-bg: #FFFFFF;
+  --admin-border: #E8D9C5;
+  --admin-accent: #C9A177;
+  --admin-accent-hover: #A9784E;
+  --admin-text-main: #4A3B2C;
+  --admin-text-muted: #8A7863;
+  --admin-success: #8E9B7C;
+}
+
+.admin-layout {
+  background-color: var(--admin-bg);
+  color: var(--admin-text-main);
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.admin-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.admin-layout h1, 
+.admin-layout h2, 
+.admin-layout h3, 
+.admin-layout h4 {
+  color: var(--admin-text-main);
+  margin-top: 0;
+  font-weight: 600;
+}
+
+.admin-layout h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+
+.admin-layout h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.admin-layout h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-layout h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: var(--admin-text-muted);
+}
+
+.admin-layout p {
+  color: var(--admin-text-muted);
+  margin-top: 0;
+  line-height: 1.5;
+}
+
+.admin-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.admin-card {
+  background-color: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(74, 59, 44, 0.05); /* very subtle warm shadow */
+}
+
+.admin-card-compact {
+  padding: 1rem;
+}
+
+.admin-button {
+  background-color: var(--admin-accent);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-button:hover:not(:disabled) {
+  background-color: var(--admin-accent-hover);
+}
+
+.admin-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-button-success {
+  background-color: var(--admin-success);
+}
+
+.admin-button-success:hover:not(:disabled) {
+  background-color: var(--admin-success); /* keep it static if disabled, hover handled above but just in case */
+}
+
+.admin-button-outline {
+  background-color: transparent;
+  color: var(--admin-text-main);
+  border: 1px solid var(--admin-border);
+}
+
+.admin-button-outline:hover:not(:disabled) {
+  background-color: var(--admin-border);
+  color: var(--admin-text-main);
+}
+
+.admin-button-small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.admin-table-container {
+  overflow-x: auto;
+  background-color: var(--admin-card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  box-shadow: 0 2px 4px rgba(74, 59, 44, 0.05);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.admin-table th, 
+.admin-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+  color: var(--admin-text-main);
+}
+
+.admin-table th {
+  font-weight: 500;
+  color: var(--admin-text-muted);
+  background-color: rgba(245, 237, 228, 0.3); /* very light hint */
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr:hover td {
+  background-color: rgba(245, 237, 228, 0.4);
+}
+
+.admin-badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.admin-badge-user {
+  background-color: transparent;
+  color: var(--admin-text-muted);
+  border: 1px solid var(--admin-border);
+}
+
+.admin-badge-admin {
+  background-color: var(--admin-bg);
+  color: var(--admin-accent-hover);
+  border: 1px solid var(--admin-border);
+}
+
+.order-summary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--admin-border);
+}
+
+.order-summary-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-summary-label {
+  font-size: 0.8rem;
+  color: var(--admin-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.order-summary-value {
+  font-weight: 500;
+  color: var(--admin-text-main);
+}
+
+.order-books-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.order-books-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--admin-border);
+  color: var(--admin-text-main);
+  font-size: 0.95rem;
+}
+
+.order-books-item:last-child {
+  border-bottom: none;
+}
+
+.order-books-item-title {
+  flex: 1;
+}
+
+.order-books-item-qty {
+  width: 60px;
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+.order-books-item-price {
+  width: 80px;
+  text-align: right;
+}
+
+/* Status text coloring */
+.status-text-pending {
+  color: var(--admin-text-main);
+}
+
+.status-text-delivered {
+  color: var(--admin-success);
+}

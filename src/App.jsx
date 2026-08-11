@@ -6,6 +6,7 @@ import UserApp from './pages/UserApp';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './pages/ProtectedRoute';
 import AdminRoute from './pages/AdminRoute';
+import AdminUserDetail from './pages/AdminUserDetail';
 import './css/index.css';
 
 export default function App() {
@@ -27,6 +28,14 @@ export default function App() {
         element={
           <AdminRoute>
             <AdminDashboard />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/users/:id"
+        element={
+          <AdminRoute>
+            <AdminUserDetail />
           </AdminRoute>
         }
       />
