@@ -1,20 +1,27 @@
 import { useAuth } from "../context/AuthContext";
 import AdminUsers from "./AdminUsers";
+import Footer from "../components/Footer";
 import "../css/admin.css";
 
 export default function AdminDashboard() {
-  const { profile, logout } = useAuth();
+  const { profile } = useAuth();
 
   return (
-    <div className="admin-layout">
-      <div className="admin-container">
-        <div className="admin-header-flex">
-          <h1>Admin panel</h1>
-          <button className="admin-button admin-button-outline admin-button-small" onClick={logout}>Log out</button>
-        </div>
+    <>
+      <div className="admin-layout">
+        <div className="admin-container">
+          <div className="admin-hero">
+            <div className="admin-hero-text">
+              <h1>Admin panel</h1>
+              <p>Welcome back — here's everyone using Bookly.</p>
+            </div>
+            <span className="admin-badge-role">Administrator</span>
+          </div>
 
-        <AdminUsers />
+          <AdminUsers />
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import OrderCard from "../components/Admin/OrderCard";
+import Footer from "../components/Footer";
 import "../css/admin.css";
 
 export default function AdminUserDetail() {
@@ -35,44 +36,72 @@ export default function AdminUserDetail() {
         fetchUser();
     }, [id]);
 
+    const handleOrderConfirmed = (orderId) => {
+        setData((prev) => ({
+            ...prev,
+            orders: prev.orders.map((order) =>
+                order.id === orderId ? { ...order, status: "delivered" } : order
+            ),
+        }));
+    };
+
     if (loading) {
-        return <p>Loading user...</p>;
+        return (
+            <div className="admin-layout">
+                <div className="admin-container">
+                    <p>Loading user...</p>
+                </div>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-layout">
+                <div className="admin-container">
+                    <p>{error}</p>
+                </div>
+            </div>
+        );
     }
 
     return (
-        <div className="admin-layout">
-            <div className="admin-container">
-                <button 
-                    className="admin-button admin-button-outline admin-button-small" 
-                    onClick={() => navigate("/admin/dashboard")} 
-                    style={{ marginBottom: '1.25rem' }}
-                >
-                    ← Back to Users
-                </button>
+        <>
+            <div className="admin-layout">
+                <div className="admin-container">
+                    <button
+                        className="admin-button admin-button-outline admin-button-small admin-back-link"
+                        onClick={() => navigate("/admin/dashboard")}
+                    >
+                        ← Back to Users
+                    </button>
 
-                <div className="admin-card admin-card-compact">
-                    <h1 style={{ marginTop: 0, marginBottom: 0 }}>{data.profile.full_name || "—"}</h1>
-                </div>
-
-                <h2 style={{ marginTop: '1.75rem', marginBottom: '1rem' }}>Orders</h2>
-
-                {data.orders.length === 0 ? (
-                    <div className="admin-card admin-card-compact">
-                        <p style={{ marginBottom: 0 }}>No orders yet.</p>
+                    <div className="admin-hero">
+                        <div className="admin-hero-text">
+                            <h1>{data.profile.full_name || "—"}</h1>
+                            <p>{data.profile.location || "No location on file"}</p>
+                        </div>
+                        <span className="admin-badge-role">{data.profile.role}</span>
                     </div>
-                ) : (
-                    data.orders.map((order) => (
-                        <OrderCard
-                            key={order.id}
-                            order={order}
-                        />
-                    ))
-                )}
+
+                    <h2>Orders ({data.orders.length})</h2>
+
+                    {data.orders.length === 0 ? (
+                        <div className="admin-card admin-empty-state">
+                            <p style={{ marginBottom: 0 }}>No orders yet.</p>
+                        </div>
+                    ) : (
+                        data.orders.map((order) => (
+                            <OrderCard
+                                key={order.id}
+                                order={order}
+                                onConfirmed={handleOrderConfirmed}
+                            />
+                        ))
+                    )}
+                </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 }

@@ -1,84 +1,94 @@
 import { useState } from "react";
 
-export default function OrderCard({ order }) {
-    const [status, setStatus] = useState(order.status);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+export default function OrderCard({ order, onConfirmed }) {
+    const [confirming, setConfirming] = useState(false);
+    const [confirmError, setConfirmError] = useState("");
 
-    async function confirmDelivery() {
-        setLoading(true);
-        setError("");
+    const isDelivered = order.status === "delivered";
+
+    const handleConfirm = async () => {
+        setConfirming(true);
+        setConfirmError("");
 
         try {
             const response = await fetch(
                 `http://localhost:5000/api/admin/orders/${order.id}/confirm`,
-                {
-                    method: "PATCH",
-                }
+                { method: "PATCH" }
             );
 
             if (!response.ok) {
-                throw new Error("Failed to update delivery status");
+                throw new Error("Failed to confirm delivery");
             }
 
-            const updatedOrder = await response.json();
-
-            setStatus(updatedOrder.status);
+            onConfirmed(order.id);
         } catch (err) {
-            setError(err.message);
+            setConfirmError(err.message);
         } finally {
-            setLoading(false);
+            setConfirming(false);
         }
-    }
+    };
+
+    const formattedDate = order.created_at
+        ? new Date(order.created_at).toLocaleDateString(undefined, {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+          })
+        : "—";
 
     return (
-        <div className="admin-card">
-            <h3 style={{ marginTop: 0, marginBottom: "0.75rem" }}>Order</h3>
+        <div className="order-card">
+            <div className="order-card-header">
+                <div>
+                    <h3 style={{ margin: 0 }}>Order #{order.id.slice(0, 8)}</h3>
+                    <p style={{ margin: "2px 0 0", fontSize: "0.85rem" }}>{formattedDate}</p>
+                </div>
+                <span className={`status-pill ${isDelivered ? "status-pill-delivered" : "status-pill-pending"}`}>
+                    {isDelivered ? "✓ Delivered" : "Pending"}
+                </span>
+            </div>
 
             <div className="order-summary-row">
                 <div className="order-summary-item">
-                    <span className="order-summary-label">Location</span>
+                    <span className="order-summary-label">Delivery address</span>
                     <span className="order-summary-value">{order.location || "—"}</span>
                 </div>
                 <div className="order-summary-item">
                     <span className="order-summary-label">Total</span>
-                    <span className="order-summary-value">${order.total}</span>
-                </div>
-                <div className="order-summary-item">
-                    <span className="order-summary-label">Status</span>
-                    <span className={`order-summary-value ${status === 'delivered' ? 'status-text-delivered' : 'status-text-pending'}`} style={{ textTransform: 'capitalize' }}>
-                        {status}
-                    </span>
+                    <span className="order-summary-value">${Number(order.total).toFixed(2)}</span>
                 </div>
             </div>
-
-            <h4 style={{ marginBottom: "0.5rem" }}>Books</h4>
 
             <ul className="order-books-list">
                 {order.order_items.map((item) => (
                     <li key={item.id} className="order-books-item">
-                        <span className="order-books-item-title">{item.title}</span>
-                        <span className="order-books-item-qty">× {item.quantity}</span>
-                        <span className="order-books-item-price">${item.price}</span>
+                        <div className="order-books-item-title">
+                            {item.title}
+                            <div className="order-books-item-author">{item.author}</div>
+                        </div>
+                        <div className="order-books-item-qty">x{item.quantity}</div>
+                        <div className="order-books-item-price">${Number(item.price).toFixed(2)}</div>
                     </li>
                 ))}
             </ul>
 
-            {error && <p style={{ color: "red", fontSize: "0.85rem" }}>{error}</p>}
+            {confirmError && (
+                <p style={{ color: "#B85C5C", fontSize: "0.85rem", marginBottom: "0.75rem" }}>
+                    {confirmError}
+                </p>
+            )}
 
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button
-                    className={`admin-button ${status === "delivered" ? "admin-button-success" : ""}`}
-                    onClick={confirmDelivery}
-                    disabled={status === "delivered" || loading}
-                >
-                    {status === "delivered"
-                        ? "✓ Delivery Sent"
-                        : loading
-                            ? "Sending..."
-                            : "Confirm Delivery"}
-                </button>
-            </div>
+            {!isDelivered && (
+                <div className="order-card-footer">
+                    <button
+                        className="admin-button admin-button-success admin-button-small"
+                        onClick={handleConfirm}
+                        disabled={confirming}
+                    >
+                        {confirming ? "Confirming..." : "Confirm Delivery"}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,45 +1,59 @@
-/* Admin Nude Theme Palette */
+/* Admin Nude Theme Palette — matches user dashboard */
 :root {
-  --admin-bg: #F5EDE4;
-  --admin-card-bg: #FFFFFF;
-  --admin-border: #E8D9C5;
-  --admin-accent: #C9A177;
-  --admin-accent-hover: #A9784E;
-  --admin-text-main: #4A3B2C;
-  --admin-text-muted: #8A7863;
-  --admin-success: #8E9B7C;
+  --admin-bg: #f5ede4;
+  --admin-card-bg: #ffffff;
+  --admin-border: #e8d9c5;
+  --admin-accent: #c9a177;
+  --admin-accent-hover: #a9784e;
+  --admin-text-main: #4a3b2c;
+  --admin-text-muted: #8a7863;
+  --admin-success: #8e9b7c;
 }
 
 .admin-layout {
   background-color: var(--admin-bg);
   color: var(--admin-text-main);
   min-height: 100vh;
-  padding: 2rem 1rem;
-  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  padding: 2.5rem 1.5rem 3rem;
+  font-family: "Inter", "Segoe UI", "Roboto", sans-serif;
 }
 
 .admin-container {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-.admin-layout h1, 
-.admin-layout h2, 
-.admin-layout h3, 
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3,
 .admin-layout h4 {
   color: var(--admin-text-main);
   margin-top: 0;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .admin-layout h1 {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  letter-spacing: -0.5px;
   margin-bottom: 0;
 }
 
 .admin-layout h2 {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
+  padding-left: 14px;
+  position: relative;
+}
+
+.admin-layout h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  width: 5px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #8c6d58, #c9ad93);
 }
 
 .admin-layout h3 {
@@ -59,43 +73,87 @@
   line-height: 1.5;
 }
 
-.admin-header-flex {
+/* Hero-style header, matching user dashboard */
+.admin-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #fffdf8 0%, #f4e4d4 60%, #eedac4 100%);
+  border: 1px solid var(--admin-border);
+  border-radius: 24px;
+  padding: 34px 32px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(74, 62, 61, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-hero::after {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(
+    circle,
+    rgba(140, 109, 88, 0.12) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+}
+
+.admin-hero-text p {
+  margin: 6px 0 0;
+  position: relative;
+}
+
+.admin-badge-role {
+  background: linear-gradient(135deg, #8c6d58, #6e5444);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  position: relative;
 }
 
 .admin-card {
   background-color: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
-  border-radius: 8px;
-  padding: 1.25rem;
+  border-radius: 16px;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(74, 59, 44, 0.05); /* very subtle warm shadow */
+  box-shadow: 0 3px 12px rgba(74, 59, 44, 0.05);
 }
 
 .admin-card-compact {
-  padding: 1rem;
+  padding: 1.1rem 1.4rem;
 }
 
 .admin-button {
-  background-color: var(--admin-accent);
-  color: #FFFFFF;
+  background: linear-gradient(135deg, #8c6d58, #6e5444);
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  padding: 0.55rem 1.2rem;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   justify-content: center;
 }
 
 .admin-button:hover:not(:disabled) {
-  background-color: var(--admin-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(110, 84, 68, 0.3);
 }
 
 .admin-button:disabled {
@@ -104,86 +162,122 @@
 }
 
 .admin-button-success {
-  background-color: var(--admin-success);
-}
-
-.admin-button-success:hover:not(:disabled) {
-  background-color: var(--admin-success); /* keep it static if disabled, hover handled above but just in case */
+  background: linear-gradient(135deg, #9aa687, #7c8a6a);
 }
 
 .admin-button-outline {
-  background-color: transparent;
+  background: transparent;
   color: var(--admin-text-main);
   border: 1px solid var(--admin-border);
 }
 
 .admin-button-outline:hover:not(:disabled) {
-  background-color: var(--admin-border);
-  color: var(--admin-text-main);
+  background-color: #ffffff;
+  border-color: #c9ad93;
+  box-shadow: 0 4px 10px rgba(74, 62, 61, 0.08);
 }
 
 .admin-button-small {
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.9rem;
   font-size: 0.85rem;
 }
 
-.admin-table-container {
-  overflow-x: auto;
-  background-color: var(--admin-card-bg);
-  border-radius: 8px;
+/* Users grid (cards instead of table) */
+.admin-users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.admin-user-card {
+  background: #ffffff;
   border: 1px solid var(--admin-border);
-  box-shadow: 0 2px 4px rgba(74, 59, 44, 0.05);
+  border-radius: 16px;
+  padding: 18px;
+  cursor: pointer;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.95rem;
+.admin-user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px rgba(74, 62, 61, 0.12);
+  border-color: #c9ad93;
 }
 
-.admin-table th, 
-.admin-table td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--admin-border);
+.admin-user-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c9a177, #8c6d58);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.admin-user-name {
+  font-weight: 700;
   color: var(--admin-text-main);
 }
 
-.admin-table th {
-  font-weight: 500;
-  color: var(--admin-text-muted);
-  background-color: rgba(245, 237, 228, 0.3); /* very light hint */
+.admin-user-location {
   font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.admin-table tr:last-child td {
-  border-bottom: none;
-}
-
-.admin-table tbody tr:hover td {
-  background-color: rgba(245, 237, 228, 0.4);
+  color: var(--admin-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .admin-badge {
   display: inline-block;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  align-self: flex-start;
 }
 
 .admin-badge-user {
-  background-color: transparent;
+  background-color: var(--admin-bg);
   color: var(--admin-text-muted);
   border: 1px solid var(--admin-border);
 }
 
 .admin-badge-admin {
-  background-color: var(--admin-bg);
-  color: var(--admin-accent-hover);
+  background: linear-gradient(135deg, #8c6d58, #6e5444);
+  color: #ffffff;
+}
+
+/* Order cards */
+.order-card {
+  background-color: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
+  border-radius: 18px;
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 4px 14px rgba(74, 59, 44, 0.06);
+  transition: box-shadow 0.25s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 10px 24px rgba(74, 59, 44, 0.1);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .order-summary-row {
@@ -201,7 +295,7 @@
 }
 
 .order-summary-label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--admin-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -209,23 +303,23 @@
 }
 
 .order-summary-value {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--admin-text-main);
 }
 
 .order-books-list {
   list-style-type: none;
   padding: 0;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1.2rem 0;
 }
 
 .order-books-item {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 0.55rem 0;
   border-bottom: 1px solid var(--admin-border);
   color: var(--admin-text-main);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
 }
 
 .order-books-item:last-child {
@@ -234,6 +328,11 @@
 
 .order-books-item-title {
   flex: 1;
+}
+
+.order-books-item-author {
+  color: var(--admin-text-muted);
+  font-size: 0.85rem;
 }
 
 .order-books-item-qty {
@@ -245,13 +344,44 @@
 .order-books-item-price {
   width: 80px;
   text-align: right;
+  font-weight: 600;
 }
 
-/* Status text coloring */
-.status-text-pending {
-  color: var(--admin-text-main);
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: capitalize;
 }
 
-.status-text-delivered {
-  color: var(--admin-success);
+.status-pill-pending {
+  background: #fbefe2;
+  color: #a9784e;
+}
+
+.status-pill-delivered {
+  background: #e9eee4;
+  color: #5d6b4c;
+}
+
+.order-card-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--admin-text-muted);
+}
+
+.admin-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 1.25rem;
 }
