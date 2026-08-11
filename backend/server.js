@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const adminRoutes = require("./routes/admin");
 
 const app = express();
 const PORT = 5000;
@@ -12,6 +13,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Bookly server is running!");
 });
+
+app.use("/api/admin", adminRoutes);
 
 app.get("/api/books", async (req, res) => {
     try {
@@ -49,7 +52,6 @@ app.get("/api/books", async (req, res) => {
             const info = item.volumeInfo || {};
             const saleInfo = item.saleInfo || {};
 
-            // Ensure HTTPS image URL to prevent mixed content blocking
             let rawImage =
                 info.imageLinks?.thumbnail ||
                 info.imageLinks?.smallThumbnail ||
@@ -57,7 +59,6 @@ app.get("/api/books", async (req, res) => {
 
             const secureImage = rawImage.replace(/^http:\/\//i, "https://");
 
-            // Format price or generate consistent fallback based on ID length
             const price = saleInfo.listPrice?.amount
                 ? saleInfo.listPrice.amount.toFixed(2)
                 : ((item.id.length % 15) + 9.99).toFixed(2);

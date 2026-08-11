@@ -4,29 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-<<<<<<< HEAD
-    "test": "echo \"Error: no test specified\" && exit 1"
-=======
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
->>>>>>> origin/lina
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-<<<<<<< HEAD
     "axios": "^1.19.0",
-=======
     "@supabase/supabase-js": "^2.112.2",
->>>>>>> origin/lina
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/lina
