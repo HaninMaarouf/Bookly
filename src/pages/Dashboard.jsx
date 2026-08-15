@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BookCard from '../components/BookCard';
 import SearchPanel from '../components/SearchPanel';
 import SectionCard from '../components/SectionCard';
@@ -67,6 +67,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
     const [featuredBooks, setFeaturedBooks] = useState({ bestSelling: [], mostPopular: [], newestReleases: [] });
     const [featuredLoading, setFeaturedLoading] = useState(true);
     const [featuredError, setFeaturedError] = useState('');
+    const requestIdRef = useRef(0);
 
     const fetchBooksFromApi = async (query) => {
         const normalizedQuery = query.trim();
@@ -84,7 +85,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         return data.books;
     };
 
-    const fetchBooks = async (query) => {
+    const fetchBooks = async (query, expectedRequestId = null) => {
         const normalizedQuery = query.trim();
         if (!normalizedQuery) {
             setBooks([]);
@@ -96,10 +97,16 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         setErrorMsg('');
         try {
             const fetchedBooks = await fetchBooksFromApi(normalizedQuery);
-            setBooks(fetchedBooks);
+            // Only update results if this is still the latest request
+            if (expectedRequestId === null || expectedRequestId === requestIdRef.current) {
+                setBooks(fetchedBooks);
+            }
         } catch (err) {
             console.error('Search failed:', err);
-            setErrorMsg('Could not connect to backend server.');
+            // Only update error if this is still the latest request
+            if (expectedRequestId === null || expectedRequestId === requestIdRef.current) {
+               // setErrorMsg('Could not connect to backend server.');
+            }
         } finally {
             setLoading(false);
         }
@@ -156,6 +163,24 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
             isCancelled = true;
         };
     }, []);
+
+    // Live search effect: Automatically fetch results as user types
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            if (searchQuery.trim()) {
+                requestIdRef.current += 1;
+                const currentRequestId = requestIdRef.current;
+                fetchBooks(searchQuery, currentRequestId);
+            } else {
+                // If search is empty, clear results
+                setBooks([]);
+                setErrorMsg('');
+                requestIdRef.current += 1;
+            }
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(debounceTimer);
+    }, [searchQuery]);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
