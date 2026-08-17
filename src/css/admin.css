@@ -135,6 +135,56 @@
   padding: 1.1rem 1.4rem;
 }
 
+.admin-book-list-wrapper {
+  margin-top: 1.25rem;
+}
+
+.admin-book-list {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.9rem;
+}
+
+.admin-book-item {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: #fffdfb;
+}
+
+.admin-book-cover {
+  width: 68px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  background: #f8f4ef;
+}
+
+.admin-book-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.admin-book-meta strong,
+.admin-book-meta span,
+.admin-book-meta small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-book-meta span,
+.admin-book-meta small {
+  color: var(--admin-text-muted);
+}
+
 .admin-button {
   background: linear-gradient(135deg, #8c6d58, #6e5444);
   color: #ffffff;

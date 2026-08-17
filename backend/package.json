@@ -12,10 +12,11 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "axios": "^1.19.0",
     "@supabase/supabase-js": "^2.112.2",
+    "axios": "^1.19.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "multer": "^2.2.0"
   }
 }

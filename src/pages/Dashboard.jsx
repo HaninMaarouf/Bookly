@@ -39,10 +39,18 @@ const parsePublicationDate = (value) => {
     return Number.isNaN(parsedDate) ? null : parsedDate;
 };
 
+const getPublicationDateValue = (book) => {
+    if (!book) {
+        return null;
+    }
+
+    return book.publishedDate ?? book.published_date ?? null;
+};
+
 const sortByPublicationDate = (books) => {
     return [...books].sort((leftBook, rightBook) => {
-        const leftDate = parsePublicationDate(leftBook.publishedDate);
-        const rightDate = parsePublicationDate(rightBook.publishedDate);
+        const leftDate = parsePublicationDate(getPublicationDateValue(leftBook));
+        const rightDate = parsePublicationDate(getPublicationDateValue(rightBook));
 
         if (leftDate == null && rightDate == null) {
             return 0;
@@ -85,6 +93,21 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         return data.books;
     };
 
+    const fetchAdminBooks = async () => {
+        const res = await fetch('http://localhost:5000/api/admin/books');
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || 'Failed to load custom books.');
+        }
+
+        return Array.isArray(data) ? data.map((book) => ({
+            ...book,
+            id: String(book.id),
+            publishedDate: book.published_date || book.publishedDate || 'Unknown',
+        })) : [];
+    };
+
     const fetchBooks = async (query, expectedRequestId = null) => {
         const normalizedQuery = query.trim();
         if (!normalizedQuery) {
@@ -122,14 +145,19 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
             }
 
             try {
-                const responses = await Promise.all(FEATURED_QUERIES.map((query) => fetchBooksFromApi(query)));
+                const [responses, customBooks] = await Promise.all([
+                    Promise.all(FEATURED_QUERIES.map((query) => fetchBooksFromApi(query))),
+                    fetchAdminBooks().catch(() => [])
+                ]);
+
                 if (isCancelled) {
                     return;
                 }
 
-                const dedupedBooks = responses
-                    .flat()
-                    .filter((book, index, allBooks) => index === allBooks.findIndex((candidate) => candidate.id === book.id));
+                const mergedBooks = [...customBooks, ...responses.flat()];
+                const dedupedBooks = mergedBooks.filter(
+                    (book, index, allBooks) => index === allBooks.findIndex((candidate) => String(candidate.id) === String(book.id))
+                );
 
                 const newestReleases = sortByPublicationDate(dedupedBooks).slice(0, 4);
 
