@@ -6,7 +6,7 @@ export default function SearchPanel({ searchQuery, loading, onSearchQueryChange,
         <div className="search-container">
             <input
                 type="text"
-                placeholder="Search by title, author, or category (Press Enter)..."
+                placeholder="Search by title, author, or category..."
                 value={searchQuery}
                 onChange={onSearchQueryChange}
                 onKeyDown={onKeyDown}
