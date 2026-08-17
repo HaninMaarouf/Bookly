@@ -14,23 +14,63 @@ export default function UserApp() {
     const [toastMessage, setToastMessage] = useState('');
     const [cartItems, setCartItems] = useState([]);
 
-    const [favorites, setFavorites] = useState(() => {
-        const savedFavs = localStorage.getItem('bookly_favorites');
-        return savedFavs ? JSON.parse(savedFavs) : [];
-    });
+ const [favorites, setFavorites] = useState([]);
+const [favoritesReady, setFavoritesReady] = useState(false);
 
-    useEffect(() => {
-        localStorage.setItem('bookly_favorites', JSON.stringify(favorites));
-    }, [favorites]);
+// Load the correct favorites list whenever auth state changes:
+// guests get their own key, each logged-in user gets their own key too.
+useEffect(() => {
+    const key = user ? `bookly_favorites_${user.id}` : 'bookly_favorites_guest';
+    const saved = localStorage.getItem(key);
+    setFavorites(saved ? JSON.parse(saved) : []);
+    setFavoritesReady(true);
+}, [user]);
 
-    // Load this user's cart from Supabase on login
+// Save favorites — only reacts to favorites changing, not to user changing,
+// so it never overwrites a freshly-loaded list with a stale one mid-switch.
+useEffect(() => {
+    if (!favoritesReady) return;
+    const key = user ? `bookly_favorites_${user.id}` : 'bookly_favorites_guest';
+    localStorage.setItem(key, JSON.stringify(favorites));
+}, [favorites]);
+
+    const showToast = (msg) => {
+        setToastMessage(msg);
+        setTimeout(() => {
+            setToastMessage('');
+        }, 3000);
+    };
+
+    // Guest: cart lives in localStorage. Logged in: cart lives in Supabase.
+    // The moment someone logs in, any guest cart items get merged into their account.
     useEffect(() => {
-        if (!user) {
-            setCartItems([]);
-            return;
+        async function loadGuestCart() {
+            const saved = localStorage.getItem('bookly_guest_cart');
+            setCartItems(saved ? JSON.parse(saved) : []);
         }
 
-        async function loadCart() {
+        async function loadAndMergeCart() {
+            const guestCartRaw = localStorage.getItem('bookly_guest_cart');
+            const guestCart = guestCartRaw ? JSON.parse(guestCartRaw) : [];
+
+            if (guestCart.length > 0) {
+                const rowsToUpsert = guestCart.map((item) => ({
+                    user_id: user.id,
+                    book_id: item.id,
+                    title: item.title,
+                    author: item.author,
+                    price: item.price,
+                    cover_url: item.cover_url,
+                    quantity: item.quantity,
+                }));
+
+                await supabase
+                    .from('cart_items')
+                    .upsert(rowsToUpsert, { onConflict: 'user_id,book_id' });
+
+                localStorage.removeItem('bookly_guest_cart');
+            }
+
             const { data, error } = await supabase
                 .from('cart_items')
                 .select('*')
@@ -53,22 +93,36 @@ export default function UserApp() {
             setCartItems(formatted);
         }
 
-        loadCart();
+        if (!user) {
+            loadGuestCart();
+        } else {
+            loadAndMergeCart();
+        }
     }, [user]);
 
-    const showToast = (msg) => {
-        setToastMessage(msg);
-        setTimeout(() => {
-            setToastMessage('');
-        }, 3000);
-    };
+    // Keep guest cart persisted to localStorage as it changes
+    useEffect(() => {
+        if (!user) {
+            localStorage.setItem('bookly_guest_cart', JSON.stringify(cartItems));
+        }
+    }, [cartItems, user]);
 
-    // Add to cart — upserts into Supabase, then updates local state
     const handleAddToCart = async (book) => {
-        if (!user) return;
-
         const existing = cartItems.find((item) => item.id === book.id);
         const newQuantity = existing ? existing.quantity + 1 : 1;
+
+        if (!user) {
+            setCartItems((prevItems) => {
+                if (existing) {
+                    return prevItems.map((item) =>
+                        item.id === book.id ? { ...item, quantity: newQuantity } : item
+                    );
+                }
+                return [...prevItems, { ...book, quantity: 1 }];
+            });
+            showToast(`🛒 "${book.title}" added to cart!`);
+            return;
+        }
 
         const { error } = await supabase
             .from('cart_items')
@@ -101,10 +155,7 @@ export default function UserApp() {
         showToast(`🛒 "${book.title}" added to cart!`);
     };
 
-    // Update quantity — syncs to Supabase
     const handleUpdateQuantity = async (bookId, delta) => {
-        if (!user) return;
-
         const item = cartItems.find((i) => i.id === bookId);
         if (!item) return;
 
@@ -112,6 +163,13 @@ export default function UserApp() {
 
         if (newQuantity <= 0) {
             await handleRemoveFromCart(bookId);
+            return;
+        }
+
+        if (!user) {
+            setCartItems((prev) =>
+                prev.map((i) => (i.id === bookId ? { ...i, quantity: newQuantity } : i))
+            );
             return;
         }
 
@@ -131,9 +189,11 @@ export default function UserApp() {
         );
     };
 
-    // Remove from cart — deletes from Supabase
     const handleRemoveFromCart = async (bookId) => {
-        if (!user) return;
+        if (!user) {
+            setCartItems((prev) => prev.filter((item) => item.id !== bookId));
+            return;
+        }
 
         const { error } = await supabase
             .from('cart_items')
@@ -149,9 +209,12 @@ export default function UserApp() {
         setCartItems((prev) => prev.filter((item) => item.id !== bookId));
     };
 
-    // Clear entire cart — used after successful checkout
     const handleClearCart = async () => {
-        if (!user) return;
+        if (!user) {
+            setCartItems([]);
+            localStorage.removeItem('bookly_guest_cart');
+            return;
+        }
 
         const { error } = await supabase
             .from('cart_items')

@@ -1,12 +1,12 @@
 .book-card {
-  background-color: #ffffff;
-  border: 1px solid #e8d8ce;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 16px;
   padding: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 3px 10px rgba(74, 62, 61, 0.05);
+  box-shadow: 0 3px 10px var(--shadow-color);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -16,7 +16,7 @@
 
 .book-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 16px 32px rgba(74, 62, 61, 0.14);
+  box-shadow: 0 16px 32px var(--shadow-color);
   border-color: #c9ad93;
 }
 
@@ -29,7 +29,7 @@
   height: 220px;
   object-fit: cover;
   border-radius: 10px;
-  background-color: #f5f5f5;
+  background-color: var(--bg-primary);
   transition: transform 0.35s ease;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .book-card-title {
-  color: #4a3e3d;
+  color: var(--text-main);
   font-size: 16px;
   font-weight: 700;
   margin: 12px 0 4px 0;
@@ -48,7 +48,7 @@
 }
 
 .book-card-author {
-  color: #8c6d58;
+  color: var(--text-muted);
   font-size: 14px;
   margin: 0 0 10px 0;
   white-space: nowrap;
@@ -63,7 +63,7 @@
   flex-wrap: wrap;
   gap: 10px;
   padding-top: 10px;
-  border-top: 1px solid #faf6f0;
+  border-top: 1px solid var(--border-color);
   margin-top: 8px;
 }
 
@@ -83,9 +83,9 @@
 }
 
 .fav-btn {
-  background-color: #faf6f0;
-  border: 1px solid #e8d8ce;
-  color: #8c6d58;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
   border-radius: 50%;
   width: 34px;
   height: 34px;
@@ -127,7 +127,7 @@
 .book-modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(74, 62, 61, 0.55);
+  background-color: rgba(0, 0, 0, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,15 +137,15 @@
 }
 
 .book-modal {
-  background-color: #faf6f0;
+  background-color: var(--bg-primary);
   padding: 26px;
   border-radius: 18px;
   max-width: 450px;
   width: 100%;
-  border: 1px solid #e8d8ce;
+  border: 1px solid var(--border-color);
   max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 0 20px 50px rgba(74, 62, 61, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .book-modal-header {
@@ -159,36 +159,36 @@
   height: 135px;
   object-fit: cover;
   border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(74, 62, 61, 0.15);
+  box-shadow: 0 6px 16px var(--shadow-color);
 }
 
 .book-modal-title {
-  color: #4a3e3d;
+  color: var(--text-main);
   margin: 0 0 6px 0;
   font-size: 18px;
   font-weight: 700;
 }
 
 .book-modal-author {
-  color: #8c6d58;
+  color: var(--text-muted);
   margin: 0 0 8px 0;
   font-weight: bold;
 }
 
 .book-modal-meta {
-  color: #6e5444;
+  color: var(--accent-dark);
   margin: 0 0 4px 0;
   font-size: 14px;
 }
 
 .book-modal-price {
-  color: #6e5444;
+  color: var(--accent-dark);
   margin: 0;
   font-weight: bold;
 }
 
 .book-modal-description {
-  color: #4a3e3d;
+  color: var(--text-main);
   line-height: 1.6;
   font-size: 14px;
   margin-bottom: 20px;
@@ -201,9 +201,9 @@
 }
 
 .book-modal-link {
-  background-color: #faf6f0;
-  border: 1px solid #8c6d58;
-  color: #8c6d58;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--accent-main);
+  color: var(--accent-main);
   padding: 8px 16px;
   border-radius: 999px;
   text-decoration: none;

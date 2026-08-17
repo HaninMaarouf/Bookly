@@ -1,12 +1,12 @@
-/* Admin Nude Theme Palette — matches user dashboard */
+/* Admin Nude Theme Palette — bridges to global theme variables */
 :root {
-  --admin-bg: #f5ede4;
-  --admin-card-bg: #ffffff;
-  --admin-border: #e8d9c5;
-  --admin-accent: #c9a177;
-  --admin-accent-hover: #a9784e;
-  --admin-text-main: #4a3b2c;
-  --admin-text-muted: #8a7863;
+  --admin-bg: var(--bg-primary);
+  --admin-card-bg: var(--card-bg);
+  --admin-border: var(--border-color);
+  --admin-accent: var(--accent-main);
+  --admin-accent-hover: var(--accent-dark);
+  --admin-text-main: var(--text-main);
+  --admin-text-muted: var(--text-muted);
   --admin-success: #8e9b7c;
 }
 
@@ -77,12 +77,17 @@
 .admin-hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #fffdf8 0%, #f4e4d4 60%, #eedac4 100%);
+  background: linear-gradient(
+    135deg,
+    var(--admin-card-bg) 0%,
+    var(--admin-bg) 60%,
+    var(--admin-border) 100%
+  );
   border: 1px solid var(--admin-border);
   border-radius: 24px;
   padding: 34px 32px;
   margin-bottom: 2rem;
-  box-shadow: 0 10px 30px rgba(74, 62, 61, 0.08);
+  box-shadow: 0 10px 30px var(--shadow-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -128,7 +133,7 @@
   border-radius: 16px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: 0 3px 12px rgba(74, 59, 44, 0.05);
+  box-shadow: 0 3px 12px var(--shadow-color);
 }
 
 .admin-card-compact {
@@ -172,9 +177,9 @@
 }
 
 .admin-button-outline:hover:not(:disabled) {
-  background-color: #ffffff;
+  background-color: var(--admin-card-bg);
   border-color: #c9ad93;
-  box-shadow: 0 4px 10px rgba(74, 62, 61, 0.08);
+  box-shadow: 0 4px 10px var(--shadow-color);
 }
 
 .admin-button-small {
@@ -190,7 +195,7 @@
 }
 
 .admin-user-card {
-  background: #ffffff;
+  background: var(--admin-card-bg);
   border: 1px solid var(--admin-border);
   border-radius: 16px;
   padding: 18px;
@@ -206,7 +211,7 @@
 
 .admin-user-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(74, 62, 61, 0.12);
+  box-shadow: 0 14px 28px var(--shadow-color);
   border-color: #c9ad93;
 }
 
@@ -263,12 +268,12 @@
   border-radius: 18px;
   padding: 1.4rem 1.5rem;
   margin-bottom: 1.2rem;
-  box-shadow: 0 4px 14px rgba(74, 59, 44, 0.06);
+  box-shadow: 0 4px 14px var(--shadow-color);
   transition: box-shadow 0.25s ease;
 }
 
 .order-card:hover {
-  box-shadow: 0 10px 24px rgba(74, 59, 44, 0.1);
+  box-shadow: 0 10px 24px var(--shadow-color);
 }
 
 .order-card-header {
@@ -384,4 +389,22 @@
   align-items: center;
   gap: 6px;
   margin-bottom: 1.25rem;
+}
+
+.theme-toggle-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.08);
 }

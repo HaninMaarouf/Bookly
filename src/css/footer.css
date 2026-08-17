@@ -1,7 +1,7 @@
 .site-footer {
   margin-top: 24px;
   border-top: 1px solid var(--border-color);
-  background: linear-gradient(135deg, #f7eee6 0%, #f3e7da 100%);
+  background: var(--card-bg);
   color: var(--text-main);
 }
 
@@ -60,7 +60,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #ffffff;
+  background: var(--card-bg);
   border: 1px solid var(--border-color);
   color: var(--accent-dark);
   font-weight: 600;

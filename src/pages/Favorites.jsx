@@ -1,7 +1,7 @@
 import React from 'react';
 import BookCard from '../components/BookCard';
 import PageHeader from '../components/PageHeader';
-import './Favorites.css';
+import './favorites.css';
 
 export default function Favorites({ favorites, onAddToCart, onToggleFav, onNavigateHome }) {
     return (

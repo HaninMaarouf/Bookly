@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import '../css/Auth.css';
 
@@ -9,6 +9,11 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const intent = location.state?.intent;
+  const infoMessage = location.state?.message;
+  const redirectTo = location.state?.from;
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -42,14 +47,30 @@ export default function Login() {
     if (profile?.role === 'admin') {
       navigate('/admin/dashboard');
     } else {
-      navigate('/dashboard');
+      navigate(redirectTo || '/dashboard');
     }
   }
 
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleLogin}>
-        <h1>Log in to Bookly</h1>
+        <h1>{intent === 'admin' ? 'Admin Login' : 'Log in to Bookly'}</h1>
+
+        {infoMessage && (
+          <p
+            style={{
+              background: '#FBEFE2',
+              color: '#A9784E',
+              padding: '0.6rem 0.8rem',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              textAlign: 'center',
+              margin: 0,
+            }}
+          >
+            {infoMessage}
+          </p>
+        )}
 
         <label>Email</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />

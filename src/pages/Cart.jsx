@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import './Cart.css';
 
 export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClearCart, onNavigateHome }) {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [location, setLocation] = useState('');
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
     const [checkoutError, setCheckoutError] = useState('');
 
-    // Calculations
     const subtotal = cartItems.reduce(
         (sum, item) => sum + parseFloat(item.price) * item.quantity,
         0
@@ -18,25 +19,28 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
     const shippingFee = cartItems.length > 0 ? 5.0 : 0.0;
     const grandTotal = subtotal + shippingFee;
 
-    // Checkout submit — writes to Supabase, then clears the cart in Supabase too
     const handleCheckout = async (e) => {
         e.preventDefault();
         setCheckoutError('');
+
+        if (!user) {
+            navigate('/login', {
+                state: {
+                    message: 'Please log in to complete your order.',
+                    from: '/dashboard',
+                },
+            });
+            return;
+        }
 
         if (!location.trim()) {
             alert('Please enter a valid delivery address.');
             return;
         }
 
-        if (!user) {
-            setCheckoutError('You must be logged in to place an order.');
-            return;
-        }
-
         setIsCheckingOut(true);
 
         try {
-            // 1. Create the order
             const { data: order, error: orderError } = await supabase
                 .from('orders')
                 .insert({
@@ -50,7 +54,6 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
 
             if (orderError) throw orderError;
 
-            // 2. Create one order_items row per book in the cart
             const itemsToInsert = cartItems.map((item) => ({
                 order_id: order.id,
                 title: item.title,
@@ -65,7 +68,6 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
 
             if (itemsError) throw itemsError;
 
-            // 3. Clear the cart (in Supabase and local state) and show confirmation
             await onClearCart();
             setIsCheckingOut(false);
             setOrderSuccess(true);
@@ -98,9 +100,23 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
         <div className="cart-page">
             <div className="cart-container">
                 <div className="cart-header">
-                    <h2>Your Shopping Cart </h2>
+                    <h2 className="cart-title">
+                        Your Shopping Cart
+                        <svg viewBox="0 0 24 24" width="22" height="22" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M6 6h15l-1.5 9h-12L5 3H2"
+                                fill="none"
+                                stroke="#4A3E3D"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                            <circle cx="9" cy="20" r="1.4" fill="#4A3E3D" />
+                            <circle cx="18" cy="20" r="1.4" fill="#4A3E3D" />
+                        </svg>
+                    </h2>
                     <button className="btn-secondary" onClick={onNavigateHome}>
-                        ← Back 
+                        ← Back
                     </button>
                 </div>
 
@@ -113,7 +129,6 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
                     </div>
                 ) : (
                     <div className="cart-content">
-                        {/* Cart Item List */}
                         <div className="cart-items-list">
                             {cartItems.map((item) => (
                                 <div className="cart-item" key={item.id}>
@@ -162,7 +177,6 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
                             ))}
                         </div>
 
-                        {/* Order Summary & Delivery Form */}
                         <div className="cart-summary-card">
                             <h3>Order Summary</h3>
                             <div className="summary-row">
@@ -179,6 +193,12 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
                                 <span>${grandTotal.toFixed(2)}</span>
                             </div>
 
+                            {!user && (
+                                <p style={{ color: '#A9784E', fontSize: '0.85rem', marginTop: '0.75rem' }}>
+                                    You'll need to log in to complete checkout.
+                                </p>
+                            )}
+
                             <form onSubmit={handleCheckout} className="checkout-form">
                                 <label htmlFor="location">Delivery Address</label>
                                 <textarea
@@ -187,7 +207,7 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
                                     placeholder="Enter street, city, and postal code..."
                                     value={location}
                                     onChange={(e) => setLocation(e.target.value)}
-                                    required
+                                    required={!!user}
                                 />
 
                                 {checkoutError && (
@@ -201,7 +221,11 @@ export default function Cart({ cartItems, onUpdateQuantity, onRemoveItem, onClea
                                     className="btn-primary checkout-btn"
                                     disabled={isCheckingOut}
                                 >
-                                    {isCheckingOut ? 'Processing Order...' : 'Complete Checkout'}
+                                    {isCheckingOut
+                                        ? 'Processing Order...'
+                                        : user
+                                        ? 'Complete Checkout'
+                                        : 'Log in to Checkout'}
                                 </button>
                             </form>
                         </div>

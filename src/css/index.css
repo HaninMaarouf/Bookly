@@ -14,24 +14,34 @@ body,
 :root {
   --bg-primary: #faf6f0;
   --card-bg: #ffffff;
-  --accent-main: #8c6d58;
-  --accent-dark: #6e5444;
   --border-color: #e8d8ce;
   --text-main: #4a3e3d;
   --text-muted: #8c6d58;
+  --accent-main: #8c6d58;
+  --accent-dark: #6e5444;
+  --shadow-color: rgba(74, 62, 61, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg-primary: #221d1a;
+  --card-bg: #2e2823;
+  --border-color: #453b33;
+  --text-main: #f0e6dc;
+  --text-muted: #c2a98f;
+  --accent-main: #d4a876;
+  --accent-dark: #e8c99a;
+  --shadow-color: rgba(0, 0, 0, 0.35);
 }
 
 body {
-  font-family:
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Tahoma,
-    Geneva,
-    Verdana,
-    sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-main);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
 button,

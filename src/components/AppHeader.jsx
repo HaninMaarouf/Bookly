@@ -1,7 +1,44 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import './AppHeader.css';
 
+function getInitials(name) {
+    if (!name) return null;
+    return name
+        .split(' ')
+        .map((part) => part[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+}
+
 export default function AppHeader({ favoritesCount, cartCount, onNavigateDashboard, onNavigateFavorites, onNavigateCart }) {
+    const { user, profile, logout } = useAuth();
+    const { theme, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleLogout = async () => {
+        await logout();
+        setMenuOpen(false);
+        navigate('/login');
+    };
+
+    const initials = getInitials(profile?.full_name);
+
     return (
         <header className="navbar">
             <div className="navbar-logo" onClick={onNavigateDashboard}>
@@ -47,6 +84,103 @@ export default function AppHeader({ favoritesCount, cartCount, onNavigateDashboa
                     <span className="pill-label">Cart</span>
                     <span key={cartCount} className="pill-count cart-count pill-bounce">{cartCount}</span>
                 </button>
+
+                <button className="theme-toggle-btn" onClick={toggleTheme} title="Toggle dark mode">
+                    {theme === 'light' ? (
+                        <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    ) : (
+                        <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                            <path
+                                d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                    )}
+                </button>
+
+                <div className="profile-menu" ref={menuRef}>
+                    <button className="profile-avatar-btn" onClick={() => setMenuOpen((open) => !open)}>
+                        {user && initials ? (
+                            <span className="profile-avatar profile-avatar-filled">{initials}</span>
+                        ) : (
+                            <span className="profile-avatar profile-avatar-default">
+                                <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                                    <path d="M4 20c0-4 3.5-7 8-7s8 3 8 7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                                </svg>
+                            </span>
+                        )}
+                    </button>
+
+                    {menuOpen && (
+                        <div className="profile-dropdown">
+                            {user ? (
+                                <>
+                                    <div className="profile-dropdown-header">
+                                        <span className="profile-dropdown-name">{profile?.full_name || 'Reader'}</span>
+                                        <span className="profile-dropdown-role">
+                                            {profile?.role === 'admin' ? 'Administrator' : 'Member'}
+                                        </span>
+                                    </div>
+                                    <button
+                                        className="profile-dropdown-item"
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            navigate(profile?.role === 'admin' ? '/admin/dashboard' : '/dashboard');
+                                        }}
+                                    >
+                                        {profile?.role === 'admin' ? 'Admin Panel' : 'My Dashboard'}
+                                    </button>
+                                    <button className="profile-dropdown-item profile-dropdown-danger" onClick={handleLogout}>
+                                        Log out
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        className="profile-dropdown-item"
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            navigate('/login', { state: { intent: 'user' } });
+                                        }}
+                                    >
+                                        Log in as User
+                                    </button>
+                                    <button
+                                        className="profile-dropdown-item"
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            navigate('/login', { state: { intent: 'admin' } });
+                                        }}
+                                    >
+                                        Log in as Admin
+                                    </button>
+                                    <button
+                                        className="profile-dropdown-item"
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            navigate('/signup');
+                                        }}
+                                    >
+                                        Sign up
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );
