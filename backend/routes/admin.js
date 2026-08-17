@@ -189,6 +189,45 @@ router.get("/users/:id", async (req, res) => {
     });
 });
 
+// Update a user's profile
+router.patch("/users/:id", async (req, res) => {
+    const userId = req.params.id;
+    const { full_name, location } = req.body || {};
+
+    if (!userId) {
+        return res.status(400).json({
+            error: "User id is required",
+        });
+    }
+
+    if (!full_name || !full_name.trim()) {
+        return res.status(400).json({
+            error: "Full name is required",
+        });
+    }
+
+    const { data, error } = await supabaseAdmin
+        .from("profiles")
+        .update({
+            full_name: full_name.trim(),
+            location: location?.trim() || null,
+        })
+        .eq("id", userId)
+        .select("id, full_name, role, location, created_at")
+        .single();
+
+    if (error) {
+        return res.status(500).json({
+            error: error.message,
+        });
+    }
+
+    res.json({
+        message: "User updated successfully",
+        profile: data,
+    });
+});
+
 // Mark an order as delivered
 router.patch("/orders/:id/confirm", async (req, res) => {
     const orderId = req.params.id;

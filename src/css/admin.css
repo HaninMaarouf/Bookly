@@ -435,3 +435,112 @@
   gap: 6px;
   margin-bottom: 1.25rem;
 }
+
+/* ── Edit user section header ─────────────────────── */
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.admin-section-header h2 {
+  margin-bottom: 0.2rem;
+}
+
+.admin-section-header > div > p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+/* ── Read-only user info ──────────────────────────── */
+.admin-user-information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.admin-user-information p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--admin-text-main);
+}
+
+.admin-user-information strong {
+  color: var(--admin-text-muted);
+  font-weight: 600;
+}
+
+/* ── Form groups ──────────────────────────────────── */
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.admin-form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--admin-text-muted);
+}
+
+.admin-form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--admin-text-main);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-form-group input:focus {
+  border-color: var(--admin-accent);
+  box-shadow: 0 0 0 3px rgba(201, 161, 119, 0.18);
+  background: #ffffff;
+}
+
+.admin-form-group input::placeholder {
+  color: var(--admin-text-muted);
+  opacity: 0.6;
+}
+
+/* ── Form action buttons row ──────────────────────── */
+.admin-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+/* ── Feedback messages ────────────────────────────── */
+.admin-success-message {
+  background: #edf2e8;
+  color: #4d6040;
+  border: 1px solid #c4d4b8;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.admin-error-message {
+  background: #fbede8;
+  color: #8c3d2e;
+  border: 1px solid #e8c4b8;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
