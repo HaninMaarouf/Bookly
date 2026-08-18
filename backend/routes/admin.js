@@ -228,6 +228,63 @@ router.patch("/users/:id", async (req, res) => {
     });
 });
 
+// Delete a user
+router.delete("/users/:id", async (req, res) => {
+    const userId = req.params.id;
+
+    if (!userId) {
+        return res.status(400).json({
+            error: "User id is required",
+        });
+    }
+
+    try {
+        // Check that the user exists and is not an admin
+        const { data: profile, error: profileError } = await supabaseAdmin
+            .from("profiles")
+            .select("id, full_name, role")
+            .eq("id", userId)
+            .single();
+
+        if (profileError || !profile) {
+            return res.status(404).json({
+                error: "User not found",
+            });
+        }
+
+        // Never allow an admin to be deleted through this endpoint
+        if (profile.role === "admin") {
+            return res.status(403).json({
+                error: "Admin users cannot be deleted.",
+            });
+        }
+
+        // Delete the user from Supabase Auth.
+        // The database relationships will handle the profile,
+        // cart items, and orders automatically.
+        const { error: deleteError } =
+            await supabaseAdmin.auth.admin.deleteUser(userId);
+
+        if (deleteError) {
+            return res.status(500).json({
+                error: deleteError.message || "Failed to delete user.",
+            });
+        }
+
+        return res.json({
+            message: "User deleted successfully.",
+            user: {
+                id: profile.id,
+                full_name: profile.full_name,
+            },
+        });
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message || "Failed to delete user.",
+        });
+    }
+});
+
 // Mark an order as delivered
 router.patch("/orders/:id/confirm", async (req, res) => {
     const orderId = req.params.id;
