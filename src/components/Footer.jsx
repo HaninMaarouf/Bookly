@@ -6,6 +6,7 @@ import '../css/footer.css';
 export default function Footer() {
     const navigate = useNavigate();
     const { user, logout } = useAuth();
+    const currentYear = new Date().getFullYear();
 
     const handleLogout = async () => {
         await logout();
@@ -17,7 +18,12 @@ export default function Footer() {
             <div className="footer-content">
                 <div className="footer-brand">
                     <h3>Bookly</h3>
-                    <p>Thoughtful books, calm spaces, and stories worth keeping.</p>
+                    <p className="footer-tagline">
+                        Discover your next favorite book with Bookly.
+                    </p>
+                    <p className="footer-subtext">
+                        Thoughtful books, calm spaces, and stories worth keeping.
+                    </p>
                 </div>
 
                 {user ? (
@@ -49,6 +55,10 @@ export default function Footer() {
                         Log in
                     </button>
                 )}
+            </div>
+
+            <div className="footer-bottom">
+                <p>&copy; {currentYear} Bookly. All rights reserved.</p>
             </div>
         </footer>
     );

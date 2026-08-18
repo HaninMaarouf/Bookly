@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BookCard from '../components/BookCard';
 import SearchPanel from '../components/SearchPanel';
 import SectionCard from '../components/SectionCard';
@@ -39,10 +39,18 @@ const parsePublicationDate = (value) => {
     return Number.isNaN(parsedDate) ? null : parsedDate;
 };
 
+const getPublicationDateValue = (book) => {
+    if (!book) {
+        return null;
+    }
+
+    return book.publishedDate ?? book.published_date ?? null;
+};
+
 const sortByPublicationDate = (books) => {
     return [...books].sort((leftBook, rightBook) => {
-        const leftDate = parsePublicationDate(leftBook.publishedDate);
-        const rightDate = parsePublicationDate(rightBook.publishedDate);
+        const leftDate = parsePublicationDate(getPublicationDateValue(leftBook));
+        const rightDate = parsePublicationDate(getPublicationDateValue(rightBook));
 
         if (leftDate == null && rightDate == null) {
             return 0;
@@ -67,6 +75,7 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
     const [featuredBooks, setFeaturedBooks] = useState({ bestSelling: [], mostPopular: [], newestReleases: [] });
     const [featuredLoading, setFeaturedLoading] = useState(true);
     const [featuredError, setFeaturedError] = useState('');
+    const requestIdRef = useRef(0);
 
     const fetchBooksFromApi = async (query) => {
         const normalizedQuery = query.trim();
@@ -84,7 +93,22 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         return data.books;
     };
 
-    const fetchBooks = async (query) => {
+    const fetchAdminBooks = async () => {
+        const res = await fetch('http://localhost:5000/api/admin/books');
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || 'Failed to load custom books.');
+        }
+
+        return Array.isArray(data) ? data.map((book) => ({
+            ...book,
+            id: String(book.id),
+            publishedDate: book.published_date || book.publishedDate || 'Unknown',
+        })) : [];
+    };
+
+    const fetchBooks = async (query, expectedRequestId = null) => {
         const normalizedQuery = query.trim();
         if (!normalizedQuery) {
             setBooks([]);
@@ -96,10 +120,16 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
         setErrorMsg('');
         try {
             const fetchedBooks = await fetchBooksFromApi(normalizedQuery);
-            setBooks(fetchedBooks);
+            // Only update results if this is still the latest request
+            if (expectedRequestId === null || expectedRequestId === requestIdRef.current) {
+                setBooks(fetchedBooks);
+            }
         } catch (err) {
             console.error('Search failed:', err);
-            setErrorMsg('Could not connect to backend server.');
+            // Only update error if this is still the latest request
+            if (expectedRequestId === null || expectedRequestId === requestIdRef.current) {
+               // setErrorMsg('Could not connect to backend server.');
+            }
         } finally {
             setLoading(false);
         }
@@ -115,14 +145,19 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
             }
 
             try {
-                const responses = await Promise.all(FEATURED_QUERIES.map((query) => fetchBooksFromApi(query)));
+                const [responses, customBooks] = await Promise.all([
+                    Promise.all(FEATURED_QUERIES.map((query) => fetchBooksFromApi(query))),
+                    fetchAdminBooks().catch(() => [])
+                ]);
+
                 if (isCancelled) {
                     return;
                 }
 
-                const dedupedBooks = responses
-                    .flat()
-                    .filter((book, index, allBooks) => index === allBooks.findIndex((candidate) => candidate.id === book.id));
+                const mergedBooks = [...customBooks, ...responses.flat()];
+                const dedupedBooks = mergedBooks.filter(
+                    (book, index, allBooks) => index === allBooks.findIndex((candidate) => String(candidate.id) === String(book.id))
+                );
 
                 const newestReleases = sortByPublicationDate(dedupedBooks).slice(0, 4);
 
@@ -156,6 +191,24 @@ export default function Dashboard({ favorites = [], onAddToCart, onToggleFav }) 
             isCancelled = true;
         };
     }, []);
+
+    // Live search effect: Automatically fetch results as user types
+    useEffect(() => {
+        const debounceTimer = setTimeout(() => {
+            if (searchQuery.trim()) {
+                requestIdRef.current += 1;
+                const currentRequestId = requestIdRef.current;
+                fetchBooks(searchQuery, currentRequestId);
+            } else {
+                // If search is empty, clear results
+                setBooks([]);
+                setErrorMsg('');
+                requestIdRef.current += 1;
+            }
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(debounceTimer);
+    }, [searchQuery]);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {

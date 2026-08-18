@@ -1,0 +1,102 @@
+.book-image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.book-image-upload-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 210px;
+  width: min(100%, 260px);
+  border: 1.5px dashed #d4b89d;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #fffdf9 0%, #f7efe7 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.book-image-upload-box:hover {
+  border-color: #b88d67;
+  box-shadow: 0 8px 22px rgba(110, 84, 68, 0.08);
+}
+
+.book-image-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  text-align: center;
+  color: #6e5444;
+  padding: 1rem;
+}
+
+.book-image-upload-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(140, 109, 88, 0.12);
+  color: #6e5444;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.book-image-upload-placeholder span {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.book-image-upload-placeholder small {
+  color: #8a7863;
+  font-size: 0.8rem;
+}
+
+.book-image-upload-preview {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+  display: block;
+  border-radius: 18px;
+  background: #f5f0ea;
+}
+
+.book-image-upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.book-image-upload-error {
+  color: #b24a48;
+  background: #fff1f0;
+  border: 1px solid #f0c4c1;
+  border-radius: 10px;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+.admin-upload-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  background: #fffaf4;
+  border: 1px solid #eadcc9;
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  word-break: break-all;
+}
+
+.admin-upload-preview a {
+  color: #6e5444;
+  text-decoration: underline;
+}
