@@ -74,7 +74,7 @@ export default function AdminDashboard() {
           <div className="admin-hero">
             <div className="admin-hero-text">
               <h1>Admin panel</h1>
-              <p>Welcome back, {profile?.full_name || "admin"} — here's everyone using Bookly.</p>
+              <p>Welcome back, — here's everyone using Bookly.</p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <button className="theme-toggle-btn" onClick={toggleTheme} title="Toggle dark mode">
