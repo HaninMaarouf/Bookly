@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BookCard from '../components/BookCard';
 import PageHeader from '../components/PageHeader';
+import BookDetailsModal from '../components/BookDetailsModal';
 import './favorites.css';
 
 export default function Favorites({ favorites, onAddToCart, onToggleFav, onNavigateHome }) {
+    const [selectedBook, setSelectedBook] = useState(null);
+
     return (
         <div className="favorites-page">
             <div className="favorites-container">
@@ -22,13 +25,17 @@ export default function Favorites({ favorites, onAddToCart, onToggleFav, onNavig
                             <BookCard
                                 key={book.id}
                                 book={book}
+                                favorites={favorites}
                                 onAddToCart={onAddToCart}
                                 onToggleFav={onToggleFav}
+                                onOpenDetails={() => setSelectedBook(book)}
                             />
                         ))}
                     </div>
                 )}
             </div>
+
+            <BookDetailsModal book={selectedBook} onClose={() => setSelectedBook(null)} />
         </div>
     );
 }
